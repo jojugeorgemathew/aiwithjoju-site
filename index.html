@@ -5,56 +5,136 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI with Joju</title>
   <style>
+    :root {
+      --bg-dark: #0b0f14;
+      --bg-light: #f9fafb;
+      --text-dark: #ffffff;
+      --text-light: #111827;
+      --accent: #0ea5e9;
+    }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0b0f14, #1e293b);
-      color: #ffffff;
+      background: var(--bg-dark);
+      color: var(--text-dark);
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
-      padding: 2rem;
+      transition: background 0.3s, color 0.3s, font-size 0.3s;
     }
+
+    body.light-mode {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    h1 {
+      color: var(--accent);
+      margin-top: 2rem;
+    }
+
+    p {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+
     .card {
       background: #111827;
       padding: 2rem;
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       max-width: 600px;
+      margin: 5rem auto;
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #22d3ee; /* cyan accent */
+
+    body.light-mode .card {
+      background: #ffffff;
+      color: var(--text-light);
     }
-    p {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-    .btn {
-      display: inline-block;
-      background: #22d3ee;
-      color: #0b0f14;
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: transform 0.2s ease;
-    }
-    .btn:hover {
-      transform: translateY(-3px);
-    }
+
     footer {
       margin-top: 2rem;
       font-size: 0.9rem;
       color: #9ca3af;
     }
+
+    /* Settings button */
+    .settings-btn {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background: #1f2937;
+      color: #fff;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
+      padding: 2rem;
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    body.light-mode .sidebar {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .sidebar button:hover {
+      background: #0284c7;
+    }
+
+    /* Large text toggle */
+    body.large-text {
+      font-size: 1.25rem;
+    }
   </style>
 </head>
 <body>
+  <button class="settings-btn" onclick="toggleSidebar()">⚙️ Settings</button>
+
+  <div class="sidebar" id="settingsSidebar">
+    <h2>Settings</h2>
+    <button onclick="toggleTheme()">🌙 Toggle Dark/Light</button>
+    <button onclick="toggleTextSize()">🔠 Toggle Text Size</button>
+  </div>
+
   <div class="card">
     <h1>AI with Joju</h1>
     <p>
@@ -64,5 +144,19 @@
     </p>
     <footer>© 2025 AI with Joju</footer>
   </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById("settingsSidebar").classList.toggle("open");
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+    }
+
+    function toggleTextSize() {
+      document.body.classList.toggle("large-text");
+    }
+  </script>
 </body>
 </html>
