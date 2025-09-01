@@ -251,6 +251,91 @@
       <p class="quiz-result" id="quiz5-result"></p>
     </div>
 
+    <!-- FAQ Section -->
+<div id="faq" style="margin-top:2rem; text-align:left;">
+  <h2>❓ Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is Artificial Intelligence?</button>
+    <div class="faq-answer" style="display:none;">
+      Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Is AI going to take over jobs?</button>
+    <div class="faq-answer" style="display:none;">
+      AI may automate some tasks, but it also creates new opportunities and enhances human productivity.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">How can beginners start learning AI?</button>
+    <div class="faq-answer" style="display:none;">
+      Beginners can start with free online courses, tutorials, and experimenting with AI tools and projects.
+    </div>
+  </div>
+
+</div>
+
+<style>
+  /* FAQ Styles */
+  .faq-question {
+    display: block;
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .faq-question:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  body.light-mode .faq-question {
+    background: #93c5fd;
+    color: #111827;
+  }
+
+  body.light-mode .faq-question:hover {
+    background: #3b82f6;
+    color: #fff;
+  }
+
+  .faq-answer {
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    background: #1f2937;
+    color: #ffffff;
+    border-radius: 6px;
+  }
+
+  body.light-mode .faq-answer {
+    background: #e5e7eb;
+    color: #111827;
+  }
+</style>
+
+<script>
+  function toggleFAQ(button) {
+    const answer = button.nextElementSibling;
+    if (answer.style.display === "none") {
+      answer.style.display = "block";
+    } else {
+      answer.style.display = "none";
+    }
+  }
+</script>
+
+
     <footer>© 2025 AI with Joju</footer>
   </div>
 
