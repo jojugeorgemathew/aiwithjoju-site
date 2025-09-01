@@ -124,6 +124,36 @@
     body.large-text {
       font-size: 1.25rem;
     }
+
+    /* Quiz styles */
+    #quiz button {
+      display: block;
+      width: 100%;
+      background: #374151;
+      color: #ffffff;
+      border: none;
+      padding: 0.8rem;
+      margin: 0.4rem 0;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    #quiz button:hover {
+      background: #0ea5e9;
+      transform: translateY(-2px);
+    }
+
+    body.light-mode #quiz button {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    body.light-mode #quiz button:hover {
+      background: #0ea5e9;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -142,6 +172,55 @@
       Premium members get access to past archives + exclusive webinars.<br />
       <em><strong>Coming soon!</strong></em>
     </p>
+
+    <!-- Quiz Section -->
+    <div id="quiz" style="margin-top:2rem; text-align:left;">
+      <h2>🤖 Quick AI Quiz While You Wait</h2>
+
+      
+      <div class="question">
+        <p><strong>Q1:</strong> What does "AI" stand for?</p>
+        <button onclick="checkAnswer(this, false, 'result4')">1. Automated Input</button>
+        <button onclick="checkAnswer(this, true, 'result4')">2. Artificial Intelligence</button>
+        <button onclick="checkAnswer(this, false, 'result4')">3. Advanced Integration</button>
+        <p id="result4" style="margin-top:1rem; font-weight:bold;"></p>
+      </div>
+
+
+      <div class="question">
+        <p><strong>Q2:</strong> Which of these is an example of Artificial Intelligence?</p>
+        <button onclick="checkAnswer(this, true, 'result1')">1. A self-driving car</button>
+        <button onclick="checkAnswer(this, false, 'result1')">2. A bicycle</button>
+        <button onclick="checkAnswer(this, false, 'result1')">3. A spoon</button>
+        <p id="result1" style="margin-top:1rem; font-weight:bold;"></p>
+      </div>
+
+      <div class="question">
+        <p><strong>Q3:</strong> Which of these is a use case of Artificial Intelligence?</p>
+        <button onclick="checkAnswer(this, false, 'result2')">1. To cook food</button>
+        <button onclick="checkAnswer(this, false, 'result2')">2. Make a car</button>
+        <button onclick="checkAnswer(this, true, 'result2')">3. Generate ideas</button>
+        <p id="result2" style="margin-top:1rem; font-weight:bold;"></p>
+      </div>
+
+      <div class="question">
+        <p><strong>Q4:</strong> Which of these is NOT an AI application?</p>
+        <button onclick="checkAnswer(this, false, 'result5')">1. Voice assistants like Alexa</button>
+        <button onclick="checkAnswer(this, false, 'result5')">2. Image recognition</button>
+        <button onclick="checkAnswer(this, true, 'result5')">3. Boiling water in a kettle</button>
+        <p id="result5" style="margin-top:1rem; font-weight:bold;"></p>
+      </div>
+
+      <div class="question">
+        <p><strong>Q5:</strong> Which company created ChatGPT?</p>
+        <button onclick="checkAnswer(this, false, 'result3')">1. Google</button>
+        <button onclick="checkAnswer(this, true, 'result3')">2. OpenAI</button>
+        <button onclick="checkAnswer(this, false, 'result3')">3. Microsoft</button>
+        <p id="result3" style="margin-top:1rem; font-weight:bold;"></p>
+      </div>
+
+    </div>
+
     <footer>© 2025 AI with Joju</footer>
   </div>
 
@@ -156,6 +235,17 @@
 
     function toggleTextSize() {
       document.body.classList.toggle("large-text");
+    }
+
+    function checkAnswer(button, isCorrect, resultId) {
+      const result = document.getElementById(resultId);
+      if (isCorrect) {
+        result.textContent = "✅ Correct!";
+        result.style.color = "limegreen";
+      } else {
+        result.textContent = "❌ Nope, try again!";
+        result.style.color = "red";
+      }
     }
   </script>
 </body>
