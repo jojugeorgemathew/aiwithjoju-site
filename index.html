@@ -20,6 +20,7 @@
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
       transition: background 0.3s, color 0.3s, font-size 0.3s;
+      overflow-x: hidden; /* prevent horizontal scroll */
     }
 
     body.light-mode {
@@ -44,6 +45,7 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       max-width: 600px;
       margin: 5rem auto;
+      transition: margin 0.3s;
     }
 
     body.light-mode .card {
@@ -76,7 +78,7 @@
     .sidebar {
       position: fixed;
       top: 0;
-      right: -300px;
+      right: -100%; /* hide completely offscreen by default */
       width: 300px;
       height: 100%;
       background: #1f2937;
@@ -93,7 +95,7 @@
     }
 
     .sidebar.open {
-      right: 0;
+      right: 0; /* slide in when opened */
     }
 
     .sidebar h2 {
@@ -105,7 +107,7 @@
     .sidebar button {
       display: block;
       width: 100%;
-      background: var(--accent);
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
       color: #fff;
       border: none;
       padding: 0.6rem;
@@ -113,11 +115,12 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.2s;
+      transition: background 0.3s, transform 0.1s;
     }
 
     .sidebar button:hover {
-      background: #0284c7;
+      background: linear-gradient(90deg, #0284c7, #0ea5e9);
+      transform: translateY(-2px);
     }
 
     /* Large text toggle */
@@ -126,10 +129,23 @@
     }
 
     /* Quiz styles */
-    #quiz button {
+    .quiz-question {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .quiz-question h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-question p {
+      margin: 0.5rem 0;
+    }
+
+    .quiz-question button {
       display: block;
       width: 100%;
-      background: #374151;
+      background: #374151; /* dark gray */
       color: #ffffff;
       border: none;
       padding: 0.8rem;
@@ -140,29 +156,45 @@
       transition: background 0.2s, transform 0.1s;
     }
 
-    #quiz button:hover {
+    .quiz-question button:hover {
       background: #0ea5e9;
       transform: translateY(-2px);
     }
 
-    body.light-mode #quiz button {
-      background: #e5e7eb;
+    body.light-mode .quiz-question button {
+      background: #e5e7eb; /* light gray */
       color: #111827;
     }
 
-    body.light-mode #quiz button:hover {
+    body.light-mode .quiz-question button:hover {
       background: #0ea5e9;
       color: #fff;
+    }
+
+    .quiz-result {
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .card {
+        margin: 6rem 1rem 2rem 1rem;
+      }
+
+      .sidebar {
+        width: 80%;
+      }
     }
   </style>
 </head>
 <body>
-  <button class="settings-btn" onclick="toggleSidebar()">⚙️ Settings</button>
+  <button class="settings-btn">⚙️ Settings</button>
 
   <div class="sidebar" id="settingsSidebar">
     <h2>Settings</h2>
-    <button onclick="toggleTheme()">🌙 Toggle Dark/Light</button>
-    <button onclick="toggleTextSize()">🔠 Toggle Text Size</button>
+    <button id="toggleThemeBtn">🌙 Toggle Dark/Light</button>
+    <button id="toggleTextBtn">🔠 Toggle Text Size</button>
   </div>
 
   <div class="card">
@@ -174,73 +206,87 @@
     </p>
 
     <!-- Quiz Section -->
-    <div id="quiz" style="margin-top:2rem; text-align:left;">
-      <h2>🤖 Quick AI Quiz While You Wait</h2>
+    <div class="quiz-question" id="quiz1">
+      <h2>🤖 Question 1</h2>
+      <p>Which of these is an example of Artificial Intelligence?</p>
+      <button onclick="checkAnswer(this, true, 'quiz1')">A self-driving car</button>
+      <button onclick="checkAnswer(this, false, 'quiz1')">A bicycle</button>
+      <button onclick="checkAnswer(this, false, 'quiz1')">A spoon</button>
+      <p class="quiz-result" id="quiz1-result"></p>
+    </div>
 
-      
-      <div class="question">
-        <p><strong>Q1:</strong> What does "AI" stand for?</p>
-        <button onclick="checkAnswer(this, false, 'result4')">1. Automated Input</button>
-        <button onclick="checkAnswer(this, true, 'result4')">2. Artificial Intelligence</button>
-        <button onclick="checkAnswer(this, false, 'result4')">3. Advanced Integration</button>
-        <p id="result4" style="margin-top:1rem; font-weight:bold;"></p>
-      </div>
+    <div class="quiz-question" id="quiz2">
+      <h2>🤖 Question 2</h2>
+      <p>Which of these is a use case of Artificial Intelligence?</p>
+      <button onclick="checkAnswer(this, false, 'quiz2')">To cook food</button>
+      <button onclick="checkAnswer(this, false, 'quiz2')">Make a car</button>
+      <button onclick="checkAnswer(this, true, 'quiz2')">Generate ideas</button>
+      <p class="quiz-result" id="quiz2-result"></p>
+    </div>
 
+    <div class="quiz-question" id="quiz3">
+      <h2>🤖 Question 3</h2>
+      <p>Which AI technology is used to understand human language?</p>
+      <button onclick="checkAnswer(this, true, 'quiz3')">Natural Language Processing</button>
+      <button onclick="checkAnswer(this, false, 'quiz3')">Computer Vision</button>
+      <button onclick="checkAnswer(this, false, 'quiz3')">Robotics</button>
+      <p class="quiz-result" id="quiz3-result"></p>
+    </div>
 
-      <div class="question">
-        <p><strong>Q2:</strong> Which of these is an example of Artificial Intelligence?</p>
-        <button onclick="checkAnswer(this, true, 'result1')">1. A self-driving car</button>
-        <button onclick="checkAnswer(this, false, 'result1')">2. A bicycle</button>
-        <button onclick="checkAnswer(this, false, 'result1')">3. A spoon</button>
-        <p id="result1" style="margin-top:1rem; font-weight:bold;"></p>
-      </div>
+    <div class="quiz-question" id="quiz4">
+      <h2>🤖 Question 4</h2>
+      <p>Which AI is commonly used in recommendation systems?</p>
+      <button onclick="checkAnswer(this, true, 'quiz4')">Machine Learning</button>
+      <button onclick="checkAnswer(this, false, 'quiz4')">Blockchain</button>
+      <button onclick="checkAnswer(this, false, 'quiz4')">3D Printing</button>
+      <p class="quiz-result" id="quiz4-result"></p>
+    </div>
 
-      <div class="question">
-        <p><strong>Q3:</strong> Which of these is a use case of Artificial Intelligence?</p>
-        <button onclick="checkAnswer(this, false, 'result2')">1. To cook food</button>
-        <button onclick="checkAnswer(this, false, 'result2')">2. Make a car</button>
-        <button onclick="checkAnswer(this, true, 'result2')">3. Generate ideas</button>
-        <p id="result2" style="margin-top:1rem; font-weight:bold;"></p>
-      </div>
-
-      <div class="question">
-        <p><strong>Q4:</strong> Which of these is NOT an AI application?</p>
-        <button onclick="checkAnswer(this, false, 'result5')">1. Voice assistants like Alexa</button>
-        <button onclick="checkAnswer(this, false, 'result5')">2. Image recognition</button>
-        <button onclick="checkAnswer(this, true, 'result5')">3. Boiling water in a kettle</button>
-        <p id="result5" style="margin-top:1rem; font-weight:bold;"></p>
-      </div>
-
-      <div class="question">
-        <p><strong>Q5:</strong> Which company created ChatGPT?</p>
-        <button onclick="checkAnswer(this, false, 'result3')">1. Google</button>
-        <button onclick="checkAnswer(this, true, 'result3')">2. OpenAI</button>
-        <button onclick="checkAnswer(this, false, 'result3')">3. Microsoft</button>
-        <p id="result3" style="margin-top:1rem; font-weight:bold;"></p>
-      </div>
-
+    <div class="quiz-question" id="quiz5">
+      <h2>🤖 Question 5</h2>
+      <p>Which AI concept allows machines to learn from data?</p>
+      <button onclick="checkAnswer(this, true, 'quiz5')">Supervised Learning</button>
+      <button onclick="checkAnswer(this, false, 'quiz5')">Manual Coding</button>
+      <button onclick="checkAnswer(this, false, 'quiz5')">Wiring Circuits</button>
+      <p class="quiz-result" id="quiz5-result"></p>
     </div>
 
     <footer>© 2025 AI with Joju</footer>
   </div>
 
   <script>
-    function toggleSidebar() {
-      document.getElementById("settingsSidebar").classList.toggle("open");
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+      const sidebar = document.getElementById("settingsSidebar");
+      const settingsBtn = document.querySelector(".settings-btn");
 
-    function toggleTheme() {
-      document.body.classList.toggle("light-mode");
-    }
+      // Open/close sidebar
+      settingsBtn.addEventListener("click", function() {
+        sidebar.classList.toggle("open");
+      });
 
-    function toggleTextSize() {
-      document.body.classList.toggle("large-text");
-    }
+      // Close sidebar when clicking outside (mobile friendly)
+      document.addEventListener("click", function(e) {
+        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
+          sidebar.classList.remove("open");
+        }
+      });
 
-    function checkAnswer(button, isCorrect, resultId) {
-      const result = document.getElementById(resultId);
+      // Theme toggle
+      document.getElementById("toggleThemeBtn").addEventListener("click", function() {
+        document.body.classList.toggle("light-mode");
+      });
+
+      // Text size toggle
+      document.getElementById("toggleTextBtn").addEventListener("click", function() {
+        document.body.classList.toggle("large-text");
+      });
+    });
+
+    // Quiz answer check
+    function checkAnswer(button, isCorrect, quizId) {
+      const result = document.getElementById(quizId + "-result");
       if (isCorrect) {
-        result.textContent = "✅ Correct!";
+        result.textContent = "✅ Correct! Well done.";
         result.style.color = "limegreen";
       } else {
         result.textContent = "❌ Nope, try again!";
