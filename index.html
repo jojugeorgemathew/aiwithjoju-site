@@ -207,25 +207,26 @@
 
     <!-- Quiz Section -->
     <div class="quiz-question" id="quiz1">
-      <h2>🤖 Question 1</h2>
-      <p>Which of these is an example of Artificial Intelligence?</p>
-      <button onclick="checkAnswer(this, true, 'quiz1')">A self-driving car</button>
-      <button onclick="checkAnswer(this, false, 'quiz1')">A bicycle</button>
-      <button onclick="checkAnswer(this, false, 'quiz1')">A spoon</button>
+      <h2> 🧠 Quick Quiz on AI While You Wait!</h2>
+      <h2>Question 1</h2>
+      <p>What is the full form of AI?</p>
+      <button onclick="checkAnswer(this, false, 'quiz1')">Automatic Input</button>
+      <button onclick="checkAnswer(this, false, 'quiz1')">Art Interjunction</button>
+      <button onclick="checkAnswer(this, true, 'quiz1')">Artificial Intelligence</button>
       <p class="quiz-result" id="quiz1-result"></p>
     </div>
 
     <div class="quiz-question" id="quiz2">
-      <h2>🤖 Question 2</h2>
-      <p>Which of these is a use case of Artificial Intelligence?</p>
+      <h2>Question 2</h2>
+      <p>Which of these is a use case of AI?</p>
       <button onclick="checkAnswer(this, false, 'quiz2')">To cook food</button>
+      <button onclick="checkAnswer(this, true, 'quiz2')">Generating ideas</button>
       <button onclick="checkAnswer(this, false, 'quiz2')">Make a car</button>
-      <button onclick="checkAnswer(this, true, 'quiz2')">Generate ideas</button>
       <p class="quiz-result" id="quiz2-result"></p>
     </div>
 
     <div class="quiz-question" id="quiz3">
-      <h2>🤖 Question 3</h2>
+      <h2>Question 3</h2>
       <p>Which AI technology is used to understand human language?</p>
       <button onclick="checkAnswer(this, true, 'quiz3')">Natural Language Processing</button>
       <button onclick="checkAnswer(this, false, 'quiz3')">Computer Vision</button>
@@ -234,22 +235,24 @@
     </div>
 
     <div class="quiz-question" id="quiz4">
-      <h2>🤖 Question 4</h2>
+      <h2>Question 4</h2>
       <p>Which AI is commonly used in recommendation systems?</p>
-      <button onclick="checkAnswer(this, true, 'quiz4')">Machine Learning</button>
       <button onclick="checkAnswer(this, false, 'quiz4')">Blockchain</button>
       <button onclick="checkAnswer(this, false, 'quiz4')">3D Printing</button>
+      <button onclick="checkAnswer(this, true, 'quiz4')">Machine Learning</button>
       <p class="quiz-result" id="quiz4-result"></p>
     </div>
 
     <div class="quiz-question" id="quiz5">
-      <h2>🤖 Question 5</h2>
+      <h2>Question 5</h2>
       <p>Which AI concept allows machines to learn from data?</p>
       <button onclick="checkAnswer(this, true, 'quiz5')">Supervised Learning</button>
       <button onclick="checkAnswer(this, false, 'quiz5')">Manual Coding</button>
       <button onclick="checkAnswer(this, false, 'quiz5')">Wiring Circuits</button>
       <p class="quiz-result" id="quiz5-result"></p>
     </div>
+
+
 
     <!-- FAQ Section -->
 <div id="faq" style="margin-top:2rem; text-align:left;">
@@ -378,6 +381,79 @@
         result.style.color = "red";
       }
     }
+    
   </script>
+
+  <!-- Floating AI particles for background gamification -->
+<canvas id="bgCanvas"></canvas>
+
+<style>
+/* Fullscreen canvas behind content */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* so it doesn't block clicks */
+  z-index: -1; /* behind all content */
+}
+
+/* Optional: slightly darker overlay on light mode */
+body.light-mode #bgCanvas {
+  opacity: 0.6;
+}
+</style>
+
+<script>
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+// Create particles
+const particleCount = 50;
+const particles = [];
+
+for(let i=0;i<particleCount;i++){
+  particles.push({
+    x: Math.random()*width,
+    y: Math.random()*height,
+    r: Math.random()*6 + 2,
+    dx: (Math.random()-0.5)*1.5,
+    dy: (Math.random()-0.5)*1.5,
+    color: `rgba(14,165,233,${Math.random()})`
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,width,height);
+  particles.forEach(p=>{
+    // move particle
+    p.x += p.dx;
+    p.y += p.dy;
+
+    // bounce off edges
+    if(p.x<0 || p.x>width) p.dx*=-1;
+    if(p.y<0 || p.y>height) p.dy*=-1;
+
+    // draw particle
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// Handle resizing
+window.addEventListener('resize',()=>{
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+</script>
+
 </body>
 </html>
