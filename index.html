@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>AI with Joju</title>
-<link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <style>
     :root {
@@ -23,7 +22,7 @@
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;
       transition: background 0.3s, color 0.3s, font-size 0.3s;
-      overflow-x: hidden; /* prevent horizontal scroll */
+      overflow-x: hidden;
     }
 
     body.light-mode {
@@ -31,14 +30,18 @@
       color: var(--text-light);
     }
 
-    h1 {
-      color: var(--accent);
-      margin-top: 2rem;
+    body.large-text {
+      font-size: 1.25rem;
     }
 
-    p {
-      margin: 1rem 0;
-      line-height: 1.6;
+    h1 { color: var(--accent); margin-top: 2rem; }
+    p { margin: 1rem 0; line-height: 1.6; }
+
+    canvas.game {
+      border: 2px solid black;
+      background: white;
+      display: block;
+      margin: 20px auto;
     }
 
     .card {
@@ -48,7 +51,6 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       max-width: 600px;
       margin: 5rem auto;
-      transition: margin 0.3s;
     }
 
     body.light-mode .card {
@@ -81,7 +83,7 @@
     .sidebar {
       position: fixed;
       top: 0;
-      right: -100%; /* hide completely offscreen by default */
+      right: -100%;
       width: 300px;
       height: 100%;
       background: #1f2937;
@@ -97,15 +99,8 @@
       color: #111827;
     }
 
-    .sidebar.open {
-      right: 0; /* slide in when opened */
-    }
-
-    .sidebar h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-      color: var(--accent);
-    }
+    .sidebar.open { right: 0; }
+    .sidebar h2 { margin-top: 0; font-size: 1.2rem; color: var(--accent); }
 
     .sidebar button {
       display: block;
@@ -118,37 +113,19 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s, transform 0.1s;
     }
 
     .sidebar button:hover {
       background: linear-gradient(90deg, #0284c7, #0ea5e9);
-      transform: translateY(-2px);
-    }
-
-    /* Large text toggle */
-    body.large-text {
-      font-size: 1.25rem;
     }
 
     /* Quiz styles */
-    .quiz-question {
-      margin-top: 2rem;
-      text-align: left;
-    }
-
-    .quiz-question h2 {
-      margin-bottom: 0.5rem;
-    }
-
-    .quiz-question p {
-      margin: 0.5rem 0;
-    }
-
+    .quiz-question { margin-top: 2rem; text-align: left; }
+    .quiz-question h2 { margin-bottom: 0.5rem; }
     .quiz-question button {
       display: block;
       width: 100%;
-      background: #374151; /* dark gray */
+      background: #374151;
       color: #ffffff;
       border: none;
       padding: 0.8rem;
@@ -156,44 +133,58 @@
       border-radius: 8px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
     }
-
-    .quiz-question button:hover {
-      background: #0ea5e9;
-      transform: translateY(-2px);
-    }
-
+    .quiz-question button:hover { background: #0ea5e9; }
     body.light-mode .quiz-question button {
-      background: #e5e7eb; /* light gray */
-      color: #111827;
+      background: #e5e7eb; color: #111827;
     }
-
     body.light-mode .quiz-question button:hover {
-      background: #0ea5e9;
+      background: #0ea5e9; color: #fff;
+    }
+    .quiz-result { font-weight: bold; margin-top: 0.5rem; }
+
+    /* FAQ */
+    .faq-question {
+      display: block;
+      width: 100%;
+      background: #2563eb;
       color: #fff;
+      border: none;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
     }
-
-    .quiz-result {
-      font-weight: bold;
-      margin-top: 0.5rem;
+    .faq-question:hover { background: #1d4ed8; }
+    body.light-mode .faq-question { background: #93c5fd; color: #111827; }
+    body.light-mode .faq-question:hover { background: #3b82f6; color: #fff; }
+    .faq-answer {
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.5rem;
+      background: #1f2937;
+      color: #ffffff;
+      border-radius: 6px;
+      display: none;
     }
+    body.light-mode .faq-answer { background: #e5e7eb; color: #111827; }
 
-    /* Mobile adjustments */
-    @media (max-width: 600px) {
-      .card {
-        margin: 6rem 1rem 2rem 1rem;
-      }
-
-      .sidebar {
-        width: 80%;
-      }
+    /* Background animation */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
     }
+    body.light-mode #bgCanvas { opacity: 0.6; }
   </style>
 </head>
 <body>
-  <button class="settings-btn">⚙️ Settings</button>
 
+  <button class="settings-btn">⚙️ Settings</button>
   <div class="sidebar" id="settingsSidebar">
     <h2>Settings</h2>
     <button id="toggleThemeBtn">🌙 Toggle Dark/Light</button>
@@ -201,16 +192,23 @@
   </div>
 
   <div class="card">
-    <!-- Logo above title -->
-  <div style="text-align: center; margin-top: 20px;">
-    <img src="favicon.png" alt="AI with Joju Logo" width="120">
-  </div>
+    <div style="text-align: center; margin-top: 20px;">
+      <img src="favicon.png" alt="AI with Joju Logo" width="120">
+    </div>
     <h1>AI with Joju</h1>
     <p>
       Weekly free newsletter on the latest AI.<br />
       Premium members get access to past archives + exclusive webinars.<br />
       <em><strong>Coming soon!</strong></em>
     </p>
+
+  <!-- 🎮 Game -->
+  <h1>🎮 Block Catcher (Game Made by AI)</h1>
+  <p>Move with ◀️ ▶️ keys to catch falling blocks!</p>
+  <canvas id="gameCanvas" class="game" width="400" height="500"></canvas>
+  <p id="score">Score: 0</p>
+  <p id="highScore">Highest Score: 0</p>
+
 
     <!-- Quiz Section -->
     <div class="quiz-question" id="quiz1">
@@ -259,208 +257,195 @@
       <p class="quiz-result" id="quiz5-result"></p>
     </div>
 
-
-
     <!-- FAQ Section -->
-<div id="faq" style="margin-top:2rem; text-align:left;">
-  <h2>❓ Frequently Asked Questions</h2>
-
-  <div class="faq-item">
-    <button class="faq-question" onclick="toggleFAQ(this)">What is Artificial Intelligence?</button>
-    <div class="faq-answer" style="display:none;">
-      Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn.
+    <div id="faq" style="margin-top:2rem; text-align:left;">
+      <h2>❓ Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">What is Artificial Intelligence?</button>
+        <div class="faq-answer">Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">Is AI going to take over jobs?</button>
+        <div class="faq-answer">AI may automate some tasks, but it also creates new opportunities and enhances human productivity.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">How can beginners start learning AI?</button>
+        <div class="faq-answer">Beginners can start with free online courses, tutorials, and experimenting with AI tools and projects.</div>
+      </div>
     </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-question" onclick="toggleFAQ(this)">Is AI going to take over jobs?</button>
-    <div class="faq-answer" style="display:none;">
-      AI may automate some tasks, but it also creates new opportunities and enhances human productivity.
-    </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-question" onclick="toggleFAQ(this)">How can beginners start learning AI?</button>
-    <div class="faq-answer" style="display:none;">
-      Beginners can start with free online courses, tutorials, and experimenting with AI tools and projects.
-    </div>
-  </div>
-
-</div>
-
-<style>
-  /* FAQ Styles */
-  .faq-question {
-    display: block;
-    width: 100%;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    border-radius: 8px;
-    font-size: 1rem;
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-  }
-
-  .faq-question:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
-
-  body.light-mode .faq-question {
-    background: #93c5fd;
-    color: #111827;
-  }
-
-  body.light-mode .faq-question:hover {
-    background: #3b82f6;
-    color: #fff;
-  }
-
-  .faq-answer {
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.5rem;
-    background: #1f2937;
-    color: #ffffff;
-    border-radius: 6px;
-  }
-
-  body.light-mode .faq-answer {
-    background: #e5e7eb;
-    color: #111827;
-  }
-</style>
-
-<script>
-  function toggleFAQ(button) {
-    const answer = button.nextElementSibling;
-    if (answer.style.display === "none") {
-      answer.style.display = "block";
-    } else {
-      answer.style.display = "none";
-    }
-  }
-</script>
-
 
     <footer>© 2025 AI with Joju</footer>
   </div>
-
+  <!-- Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+  <!-- Scripts -->
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const sidebar = document.getElementById("settingsSidebar");
-      const settingsBtn = document.querySelector(".settings-btn");
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-      // Open/close sidebar
-      settingsBtn.addEventListener("click", function() {
-        sidebar.classList.toggle("open");
-      });
+    let basket = { x: 180, y: 460, width: 60, height: 20, speed: 20 };
+    let ball = { 
+      x: Math.random() * 360 + 20, 
+      y: 50, 
+      r: 12, 
+      dx: 3, 
+      dy: 3 
+    };
+    let score = 0;
 
-      // Close sidebar when clicking outside (mobile friendly)
-      document.addEventListener("click", function(e) {
-        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
-          sidebar.classList.remove("open");
-        }
-      });
+    // Load high score from memory
+    let highScore = localStorage.getItem("blockCatcherHighScore") || 0;
+    document.getElementById("highScore").innerText = "Highest Score: " + highScore;
 
-      // Theme toggle
-      document.getElementById("toggleThemeBtn").addEventListener("click", function() {
-        document.body.classList.toggle("light-mode");
-      });
+    document.addEventListener("keydown", moveBasket);
 
-      // Text size toggle
-      document.getElementById("toggleTextBtn").addEventListener("click", function() {
-        document.body.classList.toggle("large-text");
-      });
-    });
-
-    // Quiz answer check
-    function checkAnswer(button, isCorrect, quizId) {
-      const result = document.getElementById(quizId + "-result");
-      if (isCorrect) {
-        result.textContent = "✅ Correct! Well done.";
-        result.style.color = "limegreen";
-      } else {
-        result.textContent = "❌ Nope, try again!";
-        result.style.color = "red";
+    function moveBasket(e) {
+      if (e.key === "ArrowLeft" && basket.x > 0) {
+        basket.x -= basket.speed;
+      }
+      if (e.key === "ArrowRight" && basket.x < canvas.width - basket.width) {
+        basket.x += basket.speed;
       }
     }
+
+    function drawBasket() {
+      ctx.fillStyle = "blue";
+      ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+    }
+
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function updateBall() {
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Bounce off left/right walls
+      if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) {
+        ball.dx *= -1;
+      }
+      // Bounce off top wall
+      if (ball.y - ball.r < 0) {
+        ball.dy *= -1;
+      }
+
+      // Check if ball hits basket
+      if (
+        ball.y + ball.r >= basket.y &&
+        ball.x >= basket.x &&
+        ball.x <= basket.x + basket.width
+      ) {
+        score++;
+        resetBall();
+      }
+
+      // Missed ball
+      if (ball.y - ball.r > canvas.height) {
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("blockCatcherHighScore", highScore);
+          document.getElementById("highScore").innerText = "Highest Score: " + highScore;
+        }
+        score = 0;
+        resetBall();
+      }
+    }
+
+    function resetBall() {
+      ball.x = Math.random() * 360 + 20;
+      ball.y = 50;
+      ball.dx = (Math.random() > 0.5 ? 3 : -3);
+      ball.dy = 3;
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBasket();
+      drawBall();
+      updateBall();
+      document.getElementById("score").innerText = "Score: " + score;
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+
+// --- Sidebar + Theme/Text Settings ---
+    const sidebar = document.getElementById("settingsSidebar");
+    const settingsBtn = document.querySelector(".settings-btn");
+    settingsBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
+    document.addEventListener("click", e => {
+      if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) sidebar.classList.remove("open");
+    });
+
+    const toggleThemeBtn = document.getElementById("toggleThemeBtn");
+    const toggleTextBtn = document.getElementById("toggleTextBtn");
+
+    // Load saved settings
+    const savedTheme = localStorage.getItem("aiwithjoju-theme");
+    const savedText = localStorage.getItem("aiwithjoju-textsize");
+    if (savedTheme === "light") document.body.classList.add("light-mode");
+    if (savedText === "large") document.body.classList.add("large-text");
+
+    toggleThemeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      localStorage.setItem("aiwithjoju-theme", document.body.classList.contains("light-mode") ? "light" : "dark");
+    });
+
+    toggleTextBtn.addEventListener("click", () => {
+      document.body.classList.toggle("large-text");
+      localStorage.setItem("aiwithjoju-textsize", document.body.classList.contains("large-text") ? "large" : "normal");
+    });
+
+    // Quiz answers
+    function checkAnswer(button, isCorrect, quizId) {
+      const result = document.getElementById(quizId + "-result");
+      if (isCorrect) { result.textContent = "✅ Correct! Well done."; result.style.color = "limegreen"; }
+      else { result.textContent = "❌ Nope, try again!"; result.style.color = "red"; }
+    }
+
+    // FAQ toggle
+    function toggleFAQ(button) {
+      const answer = button.nextElementSibling;
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
+    }
+
+    // Background Particles
+    const bgCanvas = document.getElementById('bgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    let width = bgCanvas.width = window.innerWidth;
+    let height = bgCanvas.height = window.innerHeight;
+    const particles = Array.from({length: 50}, () => ({
+      x: Math.random()*width, y: Math.random()*height,
+      r: Math.random()*6 + 2,
+      dx: (Math.random()-0.5)*1.5,
+      dy: (Math.random()-0.5)*1.5,
+      color: `rgba(14,165,233,${Math.random()})`
+    }));
+
+    function animate(){
+      bgCtx.clearRect(0,0,width,height);
+      particles.forEach(p=>{
+        p.x+=p.dx; p.y+=p.dy;
+        if(p.x<0||p.x>width) p.dx*=-1;
+        if(p.y<0||p.y>height) p.dy*=-1;
+        bgCtx.beginPath(); bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        bgCtx.fillStyle=p.color; bgCtx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+    window.addEventListener('resize',()=>{
+      width = bgCanvas.width = window.innerWidth;
+      height = bgCanvas.height = window.innerHeight;
+    });
     
+
   </script>
-
-  <!-- Floating AI particles for background gamification -->
-<canvas id="bgCanvas"></canvas>
-
-<style>
-/* Fullscreen canvas behind content */
-#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* so it doesn't block clicks */
-  z-index: -1; /* behind all content */
-}
-
-/* Optional: slightly darker overlay on light mode */
-body.light-mode #bgCanvas {
-  opacity: 0.6;
-}
-</style>
-
-<script>
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-// Create particles
-const particleCount = 50;
-const particles = [];
-
-for(let i=0;i<particleCount;i++){
-  particles.push({
-    x: Math.random()*width,
-    y: Math.random()*height,
-    r: Math.random()*6 + 2,
-    dx: (Math.random()-0.5)*1.5,
-    dy: (Math.random()-0.5)*1.5,
-    color: `rgba(14,165,233,${Math.random()})`
-  });
-}
-
-function animate(){
-  ctx.clearRect(0,0,width,height);
-  particles.forEach(p=>{
-    // move particle
-    p.x += p.dx;
-    p.y += p.dy;
-
-    // bounce off edges
-    if(p.x<0 || p.x>width) p.dx*=-1;
-    if(p.y<0 || p.y>height) p.dy*=-1;
-
-    // draw particle
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=p.color;
-    ctx.fill();
-  });
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-// Handle resizing
-window.addEventListener('resize',()=>{
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-});
-</script>
 
 </body>
 </html>
