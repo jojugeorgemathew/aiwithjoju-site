@@ -1,451 +1,123 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI with Joju</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-
-  <style>
-    :root {
-      --bg-dark: #0b0f14;
-      --bg-light: #f9fafb;
-      --text-dark: #ffffff;
-      --text-light: #111827;
-      --accent: #0ea5e9;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg-dark);
-      color: var(--text-dark);
-      font-family: Arial, Helvetica, sans-serif;
-      text-align: center;
-      transition: background 0.3s, color 0.3s, font-size 0.3s;
-      overflow-x: hidden;
-    }
-
-    body.light-mode {
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    body.large-text {
-      font-size: 1.25rem;
-    }
-
-    h1 { color: var(--accent); margin-top: 2rem; }
-    p { margin: 1rem 0; line-height: 1.6; }
-
-    canvas.game {
-      border: 2px solid black;
-      background: white;
-      display: block;
-      margin: 20px auto;
-    }
-
-    .card {
-      background: #111827;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-      max-width: 600px;
-      margin: 5rem auto;
-    }
-
-    body.light-mode .card {
-      background: #ffffff;
-      color: var(--text-light);
-    }
-
-    footer {
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      color: #9ca3af;
-    }
-
-    /* Settings button */
-    .settings-btn {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      height: 100%;
-      background: #1f2937;
-      color: #fff;
-      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
-      padding: 2rem;
-      transition: right 0.3s ease;
-      z-index: 1000;
-    }
-
-    body.light-mode .sidebar {
-      background: #f3f4f6;
-      color: #111827;
-    }
-
-    .sidebar.open { right: 0; }
-    .sidebar h2 { margin-top: 0; font-size: 1.2rem; color: var(--accent); }
-
-    .sidebar button {
-      display: block;
-      width: 100%;
-      background: linear-gradient(90deg, #0ea5e9, #0284c7);
-      color: #fff;
-      border: none;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .sidebar button:hover {
-      background: linear-gradient(90deg, #0284c7, #0ea5e9);
-    }
-
-    /* Quiz styles */
-    .quiz-question { margin-top: 2rem; text-align: left; }
-    .quiz-question h2 { margin-bottom: 0.5rem; }
-    .quiz-question button {
-      display: block;
-      width: 100%;
-      background: #374151;
-      color: #ffffff;
-      border: none;
-      padding: 0.8rem;
-      margin: 0.4rem 0;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .quiz-question button:hover { background: #0ea5e9; }
-    body.light-mode .quiz-question button {
-      background: #e5e7eb; color: #111827;
-    }
-    body.light-mode .quiz-question button:hover {
-      background: #0ea5e9; color: #fff;
-    }
-    .quiz-result { font-weight: bold; margin-top: 0.5rem; }
-
-    /* FAQ */
-    .faq-question {
-      display: block;
-      width: 100%;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      text-align: left;
-      cursor: pointer;
-    }
-    .faq-question:hover { background: #1d4ed8; }
-    body.light-mode .faq-question { background: #93c5fd; color: #111827; }
-    body.light-mode .faq-question:hover { background: #3b82f6; color: #fff; }
-    .faq-answer {
-      padding: 0.8rem 1rem;
-      margin-bottom: 0.5rem;
-      background: #1f2937;
-      color: #ffffff;
-      border-radius: 6px;
-      display: none;
-    }
-    body.light-mode .faq-answer { background: #e5e7eb; color: #111827; }
-
-    /* Background animation */
-    #bgCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    body.light-mode #bgCanvas { opacity: 0.6; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aiwithjoju.com</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
-  <button class="settings-btn">⚙️ Settings</button>
-  <div class="sidebar" id="settingsSidebar">
-    <h2>Settings</h2>
-    <button id="toggleThemeBtn">🌙 Toggle Dark/Light</button>
-    <button id="toggleTextBtn">🔠 Toggle Text Size</button>
-  </div>
+    <button id="settings-icon" aria-label="Open settings">
+        <i class="fas fa-cog"></i>
+    </button>
 
-  <div class="card">
-    <div style="text-align: center; margin-top: 20px;">
-      <img src="favicon.png" alt="AI with Joju Logo" width="120">
-    </div>
-    <h1>AI with Joju</h1>
-    <p>
-      Weekly free newsletter on the latest AI.<br />
-      Premium members get access to past archives + exclusive webinars.<br />
-      <em><strong>Coming soon!</strong></em>
-    </p>
-
-  <!-- 🎮 Game -->
-  <h1>🎮 Block Catcher (Game Made by AI)</h1>
-  <p>Move with ◀️ ▶️ keys to catch falling blocks!</p>
-  <canvas id="gameCanvas" class="game" width="400" height="500"></canvas>
-  <p id="score">Score: 0</p>
-  <p id="highScore">Highest Score: 0</p>
-
-
-    <!-- Quiz Section -->
-    <div class="quiz-question" id="quiz1">
-      <h2> 🧠 Quick Quiz on AI While You Wait!</h2>
-      <h2>Question 1</h2>
-      <p>What is the full form of AI?</p>
-      <button onclick="checkAnswer(this, false, 'quiz1')">Automatic Input</button>
-      <button onclick="checkAnswer(this, false, 'quiz1')">Art Interjunction</button>
-      <button onclick="checkAnswer(this, true, 'quiz1')">Artificial Intelligence</button>
-      <p class="quiz-result" id="quiz1-result"></p>
+    <div class="header-background">
+        <div class="container hero-container">
+            <header class="hero-section">
+                <h1 class="logo-text">AI with Joju</h1>
+                <p class="subtitle-text">Weekly free newsletter about AI coming soon.</p>
+            </header>
+        </div>
     </div>
 
-    <div class="quiz-question" id="quiz2">
-      <h2>Question 2</h2>
-      <p>Which of these is a use case of AI?</p>
-      <button onclick="checkAnswer(this, false, 'quiz2')">To cook food</button>
-      <button onclick="checkAnswer(this, true, 'quiz2')">Generating ideas</button>
-      <button onclick="checkAnswer(this, false, 'quiz2')">Make a car</button>
-      <p class="quiz-result" id="quiz2-result"></p>
+    <main class="content-wrapper">
+        <div class="container">
+            <div class="spacer"></div>
+
+     <section id="ai-generator">
+    <h2>AI Prompt Generator (Currently Under Construction)</h2>
+    <div class="input-container">
+        <textarea id="prompt-input" placeholder="Enter your prompt here (e.g., Write a short poem about AI)."></textarea>
+        <button id="generate-button">Generate</button>
     </div>
-
-    <div class="quiz-question" id="quiz3">
-      <h2>Question 3</h2>
-      <p>Which AI technology is used to understand human language?</p>
-      <button onclick="checkAnswer(this, true, 'quiz3')">Natural Language Processing</button>
-      <button onclick="checkAnswer(this, false, 'quiz3')">Computer Vision</button>
-      <button onclick="checkAnswer(this, false, 'quiz3')">Robotics</button>
-      <p class="quiz-result" id="quiz3-result"></p>
+    <div class="output-container">
+        <h3>AI Output:</h3>
+        <p id="output-text">Your generated content will appear here...</p>
+        <div id="loading-spinner" class="hidden"></div>
     </div>
+</section>
 
-    <div class="quiz-question" id="quiz4">
-      <h2>Question 4</h2>
-      <p>Which AI is commonly used in recommendation systems?</p>
-      <button onclick="checkAnswer(this, false, 'quiz4')">Blockchain</button>
-      <button onclick="checkAnswer(this, false, 'quiz4')">3D Printing</button>
-      <button onclick="checkAnswer(this, true, 'quiz4')">Machine Learning</button>
-      <p class="quiz-result" id="quiz4-result"></p>
+<section class="content-section quiz-section">
+                <h2>Quick Quiz on AI!</h2>
+                <div class="quiz-container">
+                    <p class="quiz-question">What is a large language model (LLM)?</p>
+                    <ul class="quiz-options">
+                        <li data-correct="false">A. An advanced spreadsheet program</li>
+                        <li data-correct="true">B. A type of artificial intelligence trained on massive amounts of text data</li>
+                        <li data-correct="false">C. A robot that folds laundry</li>
+                        <li data-correct="false">D. A new type of web browser</li>
+                    </ul>
+                    <div id="quiz-feedback" class="quiz-feedback"></div>
+                </div>
+            </section>
+
+          
+            <section class="content-section faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>What is this newsletter about?</span>
+                            <span class="icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Our newsletter will cover the latest in artificial intelligence, from breakthroughs in research to practical applications and industry news. It's for enthusiasts and professionals alike.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>How often will the newsletter be sent?</span>
+                            <span class="icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>The newsletter will be sent out once a week, featuring fresh content and key updates to keep you informed without overwhelming your inbox.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Will it actually be free?</span>
+                            <span class="icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, absolutely! The weekly newsletter is completely free. We will not charge for the core content delivered to our subscribers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p class="copyright-text">&copy; 2025 AI with Joju</p>
+    </footer>
+
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="close-button" aria-label="Close settings">&times;</button>
+            <h2>Site Settings</h2>
+
+            <div class="setting-item">
+                <label>Theme:</label>
+                <button id="theme-toggle" class="setting-button">☀️ Switch to Dark Mode</button>
+            </div>
+
+            <div class="setting-item">
+                <label for="text-size-slider">Text Size:</label>
+                <div class="text-size-controls">
+                    <button id="font-decrease" class="setting-button">-</button>
+                    <span id="font-display">Normal</span>
+                    <button id="font-increase" class="setting-button">+</button>
+                </div>
+            </div>
+
+            <p class="setting-info">Note: Settings are saved in your browser.</p>
+        </div>
     </div>
-
-    <div class="quiz-question" id="quiz5">
-      <h2>Question 5</h2>
-      <p>Which AI concept allows machines to learn from data?</p>
-      <button onclick="checkAnswer(this, true, 'quiz5')">Supervised Learning</button>
-      <button onclick="checkAnswer(this, false, 'quiz5')">Manual Coding</button>
-      <button onclick="checkAnswer(this, false, 'quiz5')">Wiring Circuits</button>
-      <p class="quiz-result" id="quiz5-result"></p>
-    </div>
-
-    <!-- FAQ Section -->
-    <div id="faq" style="margin-top:2rem; text-align:left;">
-      <h2>❓ Frequently Asked Questions</h2>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFAQ(this)">What is Artificial Intelligence?</button>
-        <div class="faq-answer">Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFAQ(this)">Is AI going to take over jobs?</button>
-        <div class="faq-answer">AI may automate some tasks, but it also creates new opportunities and enhances human productivity.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFAQ(this)">How can beginners start learning AI?</button>
-        <div class="faq-answer">Beginners can start with free online courses, tutorials, and experimenting with AI tools and projects.</div>
-      </div>
-    </div>
-
-    <footer>© 2025 AI with Joju</footer>
-  </div>
-  <!-- Background Canvas -->
-  <canvas id="bgCanvas"></canvas>
-  <!-- Scripts -->
-  <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let basket = { x: 180, y: 460, width: 60, height: 20, speed: 20 };
-    let ball = { 
-      x: Math.random() * 360 + 20, 
-      y: 50, 
-      r: 12, 
-      dx: 3, 
-      dy: 3 
-    };
-    let score = 0;
-
-    // Load high score from memory
-    let highScore = localStorage.getItem("blockCatcherHighScore") || 0;
-    document.getElementById("highScore").innerText = "Highest Score: " + highScore;
-
-    document.addEventListener("keydown", moveBasket);
-
-    function moveBasket(e) {
-      if (e.key === "ArrowLeft" && basket.x > 0) {
-        basket.x -= basket.speed;
-      }
-      if (e.key === "ArrowRight" && basket.x < canvas.width - basket.width) {
-        basket.x += basket.speed;
-      }
-    }
-
-    function drawBasket() {
-      ctx.fillStyle = "blue";
-      ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
-    }
-
-    function drawBall() {
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-      ctx.fillStyle = "red";
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    function updateBall() {
-      ball.x += ball.dx;
-      ball.y += ball.dy;
-
-      // Bounce off left/right walls
-      if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) {
-        ball.dx *= -1;
-      }
-      // Bounce off top wall
-      if (ball.y - ball.r < 0) {
-        ball.dy *= -1;
-      }
-
-      // Check if ball hits basket
-      if (
-        ball.y + ball.r >= basket.y &&
-        ball.x >= basket.x &&
-        ball.x <= basket.x + basket.width
-      ) {
-        score++;
-        resetBall();
-      }
-
-      // Missed ball
-      if (ball.y - ball.r > canvas.height) {
-        if (score > highScore) {
-          highScore = score;
-          localStorage.setItem("blockCatcherHighScore", highScore);
-          document.getElementById("highScore").innerText = "Highest Score: " + highScore;
-        }
-        score = 0;
-        resetBall();
-      }
-    }
-
-    function resetBall() {
-      ball.x = Math.random() * 360 + 20;
-      ball.y = 50;
-      ball.dx = (Math.random() > 0.5 ? 3 : -3);
-      ball.dy = 3;
-    }
-
-    function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBasket();
-      drawBall();
-      updateBall();
-      document.getElementById("score").innerText = "Score: " + score;
-      requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-
-// --- Sidebar + Theme/Text Settings ---
-    const sidebar = document.getElementById("settingsSidebar");
-    const settingsBtn = document.querySelector(".settings-btn");
-    settingsBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
-    document.addEventListener("click", e => {
-      if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) sidebar.classList.remove("open");
-    });
-
-    const toggleThemeBtn = document.getElementById("toggleThemeBtn");
-    const toggleTextBtn = document.getElementById("toggleTextBtn");
-
-    // Load saved settings
-    const savedTheme = localStorage.getItem("aiwithjoju-theme");
-    const savedText = localStorage.getItem("aiwithjoju-textsize");
-    if (savedTheme === "light") document.body.classList.add("light-mode");
-    if (savedText === "large") document.body.classList.add("large-text");
-
-    toggleThemeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("light-mode");
-      localStorage.setItem("aiwithjoju-theme", document.body.classList.contains("light-mode") ? "light" : "dark");
-    });
-
-    toggleTextBtn.addEventListener("click", () => {
-      document.body.classList.toggle("large-text");
-      localStorage.setItem("aiwithjoju-textsize", document.body.classList.contains("large-text") ? "large" : "normal");
-    });
-
-    // Quiz answers
-    function checkAnswer(button, isCorrect, quizId) {
-      const result = document.getElementById(quizId + "-result");
-      if (isCorrect) { result.textContent = "✅ Correct! Well done."; result.style.color = "limegreen"; }
-      else { result.textContent = "❌ Nope, try again!"; result.style.color = "red"; }
-    }
-
-    // FAQ toggle
-    function toggleFAQ(button) {
-      const answer = button.nextElementSibling;
-      answer.style.display = answer.style.display === "block" ? "none" : "block";
-    }
-
-    // Background Particles
-    const bgCanvas = document.getElementById('bgCanvas');
-    const bgCtx = bgCanvas.getContext('2d');
-    let width = bgCanvas.width = window.innerWidth;
-    let height = bgCanvas.height = window.innerHeight;
-    const particles = Array.from({length: 50}, () => ({
-      x: Math.random()*width, y: Math.random()*height,
-      r: Math.random()*6 + 2,
-      dx: (Math.random()-0.5)*1.5,
-      dy: (Math.random()-0.5)*1.5,
-      color: `rgba(14,165,233,${Math.random()})`
-    }));
-
-    function animate(){
-      bgCtx.clearRect(0,0,width,height);
-      particles.forEach(p=>{
-        p.x+=p.dx; p.y+=p.dy;
-        if(p.x<0||p.x>width) p.dx*=-1;
-        if(p.y<0||p.y>height) p.dy*=-1;
-        bgCtx.beginPath(); bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        bgCtx.fillStyle=p.color; bgCtx.fill();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-    window.addEventListener('resize',()=>{
-      width = bgCanvas.width = window.innerWidth;
-      height = bgCanvas.height = window.innerHeight;
-    });
-    
-
-  </script>
-
+    <script type="module" src="script.js"></script>
 </body>
 </html>

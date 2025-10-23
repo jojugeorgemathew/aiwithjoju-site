@@ -1,0 +1,526 @@
+/*
+    This is the CSS file for aiwithjoju.com
+    It includes styling for the animated background header,
+    a solid white content section, and stylish quiz/FAQ sections.
+*/
+
+/* --- THEME VARIABLES --- */
+:root {
+    /* Define color variables for easy theming - Light Mode Defaults */
+    --text-color: #333333;
+    --primary-text-color: #111; /* For H2s, etc. */
+    --background-color: #ffffff;
+    --card-background: #f9f9f9;
+    --quiz-hover-background: #eef;
+    --quiz-border-color: #ddd;
+    --faq-answer-background: #fafafa;
+    --faq-border-color: #ccc;
+    --modal-background: #ffffff; /* Modal specific background */
+    /* NEW: Base Font Size Variable */
+    --base-font-size: 16px; 
+
+    /* Header Colors (remain constant for the animated gradient) */
+    --header-text-color: #f1f1f1;
+    --background-start: #2a083f;
+    --background-middle: #3b0e5c;
+    --background-end: #34578b;
+    
+    --primary-button-color: #007bff;
+    --primary-button-hover-color: #0056b3;
+}
+
+[data-theme='dark'] {
+    /* Dark Mode Overrides */
+    --text-color: #e0e0e0;
+    --primary-text-color: #ffffff;
+    --background-color: #1a1a1a;
+    --card-background: #2b2b2b;
+    --quiz-hover-background: #3a3a3a;
+    --quiz-border-color: #444;
+    --faq-answer-background: #252525;
+    --faq-border-color: #555;
+    --modal-background: #2b2b2b; /* Dark background for the modal */
+    
+    --primary-button-color: #8cafff; /* Brighter blue for contrast */
+    --primary-button-hover-color: #6a95ff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color); /* Updated */
+    background-color: var(--background-color); /* Updated */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s; /* Added transition for smooth theme change */
+    /* Apply base font size for scaling */
+    font-size: var(--base-font-size); 
+}
+
+/* Header Section with Animated Gradient */
+.header-background {
+    background: linear-gradient(-45deg, var(--background-start), var(--background-middle), var(--background-end));
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    padding-bottom: 14rem;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hero-container {
+    color: var(--header-text-color); /* Updated */
+}
+
+.hero-section {
+    position: relative;
+    z-index: 1;
+    margin-top: 5rem;
+    text-align: left;
+}
+
+.logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -3px;
+}
+
+.subtitle-text {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+}
+
+/* Main content area with solid background */
+.content-wrapper {
+    flex-grow: 1;
+    background-color: var(--background-color); /* Updated */
+    border-radius: 20px 20px 0 0;
+    margin-top: -6rem;
+    position: relative;
+    z-index: 2;
+    padding-top: 5rem;
+    /* Use a conditional shadow based on theme if possible, but keeping it simple here */
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.1); 
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.spacer {
+    height: 4rem;
+}
+
+/* General Content Section Styles */
+.content-section {
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.content-section h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--primary-text-color); /* Updated */
+}
+
+/* ai generator*/
+
+#ai-generator {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid var(--quiz-border-color); /* Updated */
+    border-radius: 8px;
+    background-color: var(--card-background); /* Added */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#prompt-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--quiz-border-color); /* Updated */
+    background-color: var(--background-color); /* Updated */
+    color: var(--text-color); /* Updated */
+    border-radius: 4px;
+    font-size: 16px;
+    min-height: 100px;
+}
+#prompt-input::placeholder {
+    color: var(--secondary-color);
+}
+
+#generate-button {
+    padding: 10px 20px;
+    background-color: var(--primary-button-color); /* Updated */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#generate-button:hover {
+    background-color: var(--primary-button-hover-color); /* Updated */
+}
+
+.output-container {
+    border-top: 2px solid var(--quiz-border-color); /* Updated */
+    padding-top: 20px;
+}
+
+/* Minimal spinner style */
+#loading-spinner {
+    border: 4px solid var(--quiz-border-color); /* Updated */
+    border-top: 4px solid var(--primary-button-color); /* Updated */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark Mode Toggle Button Styling (Relocated and updated for consistency) */
+#theme-toggle {
+    padding: 8px 15px;
+    border: 1px solid var(--text-color);
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 4px;
+    display: block; /* Make it a block element */
+    margin: 20px auto; /* Center it */
+    transition: background-color 0.3s, color 0.3s;
+}
+#theme-toggle:hover {
+    background-color: var(--card-background);
+}
+
+
+/* Quick Quiz Section Styles */
+.quiz-question {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    color: var(--primary-text-color); /* Updated */
+}
+
+.quiz-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quiz-options li {
+    background-color: var(--card-background); /* Updated */
+    border: 1px solid var(--quiz-border-color); /* Updated */
+    padding: 18px 25px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.quiz-options li:hover {
+    background-color: var(--quiz-hover-background); /* Updated */
+    border-color: var(--primary-button-color);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.quiz-options li.correct {
+    /* Success colors - kept fixed for visibility */
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+    font-weight: bold;
+}
+
+.quiz-options li.incorrect {
+    /* Danger colors - kept fixed for visibility */
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    font-weight: bold;
+}
+
+.quiz-feedback {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* FAQ Section Styles (Accordion) */
+.faq-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--quiz-border-color); /* Updated */
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 20px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    color: var(--primary-text-color); /* Updated */
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: var(--primary-button-color);
+}
+
+.faq-question .icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+    background-color: var(--faq-answer-background); /* Updated */
+    border-left: 3px solid var(--faq-border-color); /* Updated */
+    padding-left: 1rem;
+}
+.faq-answer p {
+    color: var(--text-color);
+}
+
+.faq-answer.active {
+    max-height: 200px;
+    padding: 20px 1rem 20px 1rem;
+}
+.faq-question.active .icon {
+    transform: rotate(45deg); /* To change + to an X or - */
+}
+
+/* Site Footer */
+.site-footer {
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--background-color); /* Updated */
+}
+
+.copyright-text {
+    margin: 0;
+    color: var(--text-color); /* Updated */
+    font-size: 0.9rem;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .hero-container {
+        text-align: center;
+    }
+
+    .hero-section {
+        margin-top: 3rem;
+    }
+
+    .logo-text {
+        font-size: 3rem;
+    }
+
+    .subtitle-text {
+        font-size: 1.4rem;
+    }
+
+    .content-wrapper {
+        margin-top: -3rem;
+        padding-top: 3rem;
+    }
+
+    .faq-question {
+        font-size: 1.1rem;
+    }
+}
+
+/* ------------------------------------- */
+/* 🌟 NEW: SETTINGS ICON & MODAL STYLES 🌟 */
+/* ------------------------------------- */
+
+#settings-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100; /* Above all other content */
+    background: none;
+    border: none;
+    color: var(--header-text-color); /* Matches header text */
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Shadow for visibility on gradient */
+}
+
+#settings-icon:hover {
+    color: var(--primary-button-color);
+    transform: rotate(30deg);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Top of everything */
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none; /* Make it unclickable when hidden */
+}
+
+.modal-content {
+    background-color: var(--modal-background);
+    color: var(--text-color);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-content label, .modal-content span {
+    /* Explicitly set the color to ensure it overrides any inherited styles */
+    color: var(--text-color);
+}
+
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.95);
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: var(--primary-text-color);
+    border-bottom: 2px solid var(--quiz-border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px dashed var(--quiz-border-color);
+}
+
+.setting-item:last-of-type {
+    border-bottom: none;
+}
+
+.setting-button {
+    padding: 8px 15px;
+    border: 1px solid var(--text-color);
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 500;
+}
+
+.setting-button:hover {
+    background-color: var(--primary-button-color);
+    color: var(--header-text-color);
+    border-color: var(--primary-button-color);
+}
+
+.text-size-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#font-display {
+    min-width: 70px;
+    text-align: center;
+}
+
+.setting-info {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* ... hurraaayyyy my website is loookin cooooler ... */
